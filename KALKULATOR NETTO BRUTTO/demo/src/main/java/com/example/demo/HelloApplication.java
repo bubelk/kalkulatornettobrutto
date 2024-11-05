@@ -12,7 +12,7 @@ public class HelloApplication extends Application {
 
     private RadioButton nettoToBrutto;
     private RadioButton bruttoToNetto;
-    private RadioButton fitToVatAmount;
+    private RadioButton fitToVat;
     private TextField wartoscBazowa;
     private ChoiceBox<String> vatChoice;
     private Label nettoLabel;
@@ -32,10 +32,10 @@ public class HelloApplication extends Application {
         bruttoToNetto = new RadioButton("Od brutto do netto");
         bruttoToNetto.setToggleGroup(methodGroup);
 
-        fitToVatAmount = new RadioButton("Dopasuj do kwoty VAT");
-        fitToVatAmount.setToggleGroup(methodGroup);
+        fitToVat = new RadioButton("Dopasuj do kwoty VAT");
+        fitToVat.setToggleGroup(methodGroup);
 
-        VBox methodBox = new VBox(5, nettoToBrutto, bruttoToNetto, fitToVatAmount);
+        VBox methodBox = new VBox(5, nettoToBrutto, bruttoToNetto, fitToVat);
         methodBox.setPadding(new Insets(10));
         TitledPane methodPane = new TitledPane("Metoda Obliczeń", methodBox);
         methodPane.setCollapsible(false);
@@ -65,9 +65,9 @@ public class HelloApplication extends Application {
         vatLabel = new Label("VAT: ");
         bruttoLabel = new Label("Brutto: ");
 
-        VBox resultsBox = new VBox(5, nettoLabel, vatLabel, bruttoLabel);
-        resultsBox.setPadding(new Insets(10));
-        TitledPane resultsPane = new TitledPane("Wyniki: ", resultsBox);
+        VBox box1 = new VBox(5, nettoLabel, vatLabel, bruttoLabel);
+        box1.setPadding(new Insets(10));
+        TitledPane resultsPane = new TitledPane("Wyniki: ", box1);
         resultsPane.setCollapsible(false);
 
         // Calculate Button
@@ -85,24 +85,24 @@ public class HelloApplication extends Application {
 
     private void calculateVat() {
         try {
-            double baseValue = Double.parseDouble(wartoscBazowa.getText());
+            double wartoscBaz = Double.parseDouble(wartoscBazowa.getText());
             double vatRate = Double.parseDouble(vatChoice.getValue().replace("%", "")) / 100;
 
             double netto, vatAmount, brutto;
 
             if (nettoToBrutto.isSelected()) {
 
-                netto = baseValue;
+                netto = wartoscBaz;
                 vatAmount = netto * vatRate;
                 brutto = netto + vatAmount;
             } else if (bruttoToNetto.isSelected()) {
 
-                brutto = baseValue;
+                brutto = wartoscBaz;
                 vatAmount = brutto * vatRate / (1 + vatRate);
                 netto = brutto - vatAmount;
             } else {
 
-                vatAmount = baseValue;
+                vatAmount = wartoscBaz;
                 netto = vatAmount / vatRate;
                 brutto = netto + vatAmount;
             }
